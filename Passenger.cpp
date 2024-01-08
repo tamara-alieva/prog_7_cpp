@@ -5,15 +5,19 @@
 using namespace std;
 
 Passenger::Passenger() : Person(0) {
+	this->type = "Passenger";
 	this->payment_method = 0;
 }
 Passenger::Passenger(string name) : Person(name, 0) {
+	this->type = "Passenger";
 	this->payment_method = 0;
 }
 Passenger::Passenger(int balance) : Person(balance) {
+	this->type = "Passenger";
 	this->payment_method = 0;
 }
 Passenger::Passenger(string name, int balance, bool method) : Person(name, balance) {
+	this->type = "Passenger";
 	this->payment_method = method;
 }
 void Passenger::setMethod(bool method) {

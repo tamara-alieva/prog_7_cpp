@@ -5,21 +5,25 @@
 using namespace std;
 
 Person::Person() {
+	this->type = "Person";
 	this->name = "";
 	this->balance = 0;
 }
 
 Person::Person(string name) {
+	this->type = "Person";
 	this->name = name;
 	this->balance = 0;
 }
 
 Person::Person(int balance) {
+	this->type = "Person";
 	this->name = "";
 	this->balance = balance;
 }
 
 Person::Person(string name, int balance) {
+	this->type = "Person";
 	this->name = name;
 	this->balance = balance;
 }
@@ -35,6 +39,10 @@ void Person::setBalance(int balance) {
 void Person::setInfo(std::string name, int balance) {
 	this->name = name;
 	this->balance = balance;
+}
+
+string Person::getType() {
+	return this->type;
 }
 
 string Person::getName() const {
@@ -80,3 +88,6 @@ ostream& Person::operator << (ostream& os) {
 	else
 		throw string{"The Person name is missing!"};
 }
+//bool Person::operator< (Person& person) {
+//
+//}

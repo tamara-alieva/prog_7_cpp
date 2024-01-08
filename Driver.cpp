@@ -5,18 +5,22 @@
 using namespace std;
 
 Driver::Driver() : Person(0) {
+	this->type = "Driver";
 	this->experience = 0;
 	this->orderAmount = 0;
 }
 Driver::Driver(string name) : Person(name, 0) {
+	this->type = "Driver";
 	this->experience = 0;
 	this->orderAmount = 0;
 }
 Driver::Driver(int balance) : Person(balance) {
+	this->type = "Driver";
 	this->experience = 0;
 	this->orderAmount = 0;
 }
 Driver::Driver(string name, int balance, int experience, int orderAmount) : Person(name, balance) {
+	this->type = "Driver";
 	this->experience = experience;
 	this->orderAmount = orderAmount;
 }
