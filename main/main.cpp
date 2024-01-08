@@ -7,10 +7,36 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <iomanip>
 using namespace std;
 
+void vector_output(vector <Person*> v) {
+    int n = v.size(); string buffer;
+    cout << "--------------------------------------------------------------------------------------------------" << endl;
+    cout.setf(ios::fixed);
+    cout << "| " << left << setw(15) << "Type" << setw(15) << "Name" << setw(14) << "Balance" << setw(15) << "Experience" << setw(20) << "Order Amount" << setw(15) << "Method" << " |" << endl;
+    cout << "--------------------------------------------------------------------------------------------------" << endl;
+    int i;
+    for (i = 0; i < n; i++) {
+        if (v[i]->getType() == "Person") {
+            cout << "| " << left << setw(15) << "Person" << setw(15) << v[i]->getName() << setw(14) << v[i]->getBalance() << setw(15) << "-" << setw(20) << "-" << setw(16) << "-" << "|" << endl;
+        }
+        if (v[i]->getType() == "Driver") {
+            Driver* driver = (Driver*)v[i];
+            cout << "| " << left << setw(15) << "Driver" << setw(15) << driver->getName() << setw(14) << driver->getBalance() << setw(15) << getExperience(*driver) << setw(20) << getOrderAmount(*driver) << setw(16) << "-" << "|" << endl;
+        }
+        if (v[i]->getType() == "Passenger") {
+            Passenger* passenger = (Passenger*)v[i];
+            if (passenger->getMethod()) buffer = "Credit card";
+            else buffer = "Cash";
+            cout << "| " << left << setw(15) << "Passenger" << setw(15) << passenger->getName() << setw(14) << passenger->getBalance() << setw(15) << "-" << setw(20) << "-" << setw(16) << buffer << "|" << endl;
+        }
+    }
+    cout << "--------------------------------------------------------------------------------------------------" << endl;
+}
+
 int main() {
-    cout << "TESTS:" << endl << endl;
+    cout << "TESTS:" << endl;
     
     vector <Person*> v;
     v.push_back(new Driver("Ivan", 7000, 10, 560));
@@ -21,16 +47,18 @@ int main() {
     v.push_back(new Driver("Dmitriy", 1000, 5, 120));
     v.push_back(new Driver("Sergey", 4000, 7, 340));
 
+    vector_output(v);
+
     Driver* driver_ptr;
     Passenger* pass_ptr;
 
-    driver_ptr = (Driver*)v[0];
+    /*driver_ptr = (Driver*)v[0];
     *driver_ptr << cout;
 
     pass_ptr = (Passenger*)v[3];
     *pass_ptr << cout;
 
-    *v[2] << cout;
+    *v[2] << cout;*/
 
     return 0;
 }
