@@ -21,5 +21,16 @@ int main() {
     v.push_back(new Driver("Dmitriy", 1000, 5, 120));
     v.push_back(new Driver("Sergey", 4000, 7, 340));
 
+    Driver* driver_ptr;
+    Passenger* pass_ptr;
+
+    driver_ptr = (Driver*)v[0];
+    *driver_ptr << cout;
+
+    pass_ptr = (Passenger*)v[3];
+    *pass_ptr << cout;
+
+    *v[2] << cout;
+
     return 0;
 }
