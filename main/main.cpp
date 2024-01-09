@@ -34,7 +34,7 @@ void vector_output(vector <Person*> v) {
             cout << "| " << left << setw(15) << "Passenger" << setw(15) << passenger->getName() << setw(14) << passenger->getBalance() << setw(15) << "-" << setw(20) << "-" << setw(16) << buffer << "|" << endl;
         }
     }
-    cout << "--------------------------------------------------------------------------------------------------" << endl;
+    cout << "--------------------------------------------------------------------------------------------------" << endl << endl;
 }
 
 bool ascending_compare(Person* first, Person* second) {
@@ -121,14 +121,84 @@ bool descending_compare(Person* first, Person* second) {
     return flag;
 }
 
+void search(vector <Person*> v, Person* element) {
+    int n = v.size(); int i, count = 0;
+    string element_type = element->getType();
+    string vector_type, buffer = ""; bool flag = 1;
+    cout << "Search result: ";
+    for (i = 0; i < n; i++) 
+    {
+        flag = 1;
+        vector_type = v[i]->getType();
+        if (element_type == vector_type) 
+        {
+            if (element->getName() != "")
+            {
+                flag = element->getName() == v[i]->getName() && element->getBalance() == v[i]->getBalance();
+            }
+            else {
+                flag = element->getBalance() == v[i]->getBalance();
+            }
+            if (element_type == "Driver")
+            {
+                Driver* vector_driver = (Driver*)v[i];
+                Driver* element_driver = (Driver*)element;
+                flag = flag * (getExperience(*vector_driver) == getExperience(*element_driver) && getOrderAmount(*vector_driver) == getOrderAmount(*element_driver));
+            }
+            if (element_type == "Passenger")
+            {
+                Passenger* vector_passenger = (Passenger*)v[i];
+                Passenger* element_passenger = (Passenger*)element;
+                flag = flag * (vector_passenger->getMethod() == element_passenger->getMethod());
+            }
+            if (flag)
+            {
+                count++;
+                if (count == 1)
+                {
+                    cout << endl << "--------------------------------------------------------------------------------------------------" << endl;
+                    cout.setf(ios::fixed);
+                    cout << "| " << left << setw(15) << "Type" << setw(15) << "Name" << setw(14) << "Balance" << setw(15) << "Experience" << setw(20) << "Order Amount" << setw(15) << "Method" << " |" << endl;
+                    cout << "--------------------------------------------------------------------------------------------------" << endl;
+                }
+                if (v[i]->getType() == "Person")
+                {
+                    cout << "| " << left << setw(15) << "Person" << setw(15) << v[i]->getName() << setw(14) << v[i]->getBalance() << setw(15) << "-" << setw(20) << "-" << setw(16) << "-" << "|" << endl;
+                }
+                if (v[i]->getType() == "Driver")
+                {
+                    Driver* driver = (Driver*)v[i];
+                    cout << "| " << left << setw(15) << "Driver" << setw(15) << driver->getName() << setw(14) << driver->getBalance() << setw(15) << getExperience(*driver) << setw(20) << getOrderAmount(*driver) << setw(16) << "-" << "|" << endl;
+                }
+                if (v[i]->getType() == "Passenger")
+                {
+                    Passenger* passenger = (Passenger*)v[i];
+                    if (passenger->getMethod()) buffer = "Credit card";
+                    else buffer = "Cash";
+                    cout << "| " << left << setw(15) << "Passenger" << setw(15) << passenger->getName() << setw(14) << passenger->getBalance() << setw(15) << "-" << setw(20) << "-" << setw(16) << buffer << "|" << endl;
+                }
+            }
+        }
+    }
+    if (count)
+    {
+        cout << "--------------------------------------------------------------------------------------------------" << endl << endl;
+    }
+    else cout << "not found" << endl << endl;
+}
+
 int main() {
     cout << "TESTS:" << endl;
     
     vector <Person*> v;
     v.push_back(new Passenger("Anna", 6000, true));
+    v.push_back(new Passenger("Irina", 6000, false));
     v.push_back(new Driver("Ivan", 7000, 10, 600));
+    v.push_back(new Driver("Sergey", 6000, 7, 350));
     v.push_back(new Passenger("Yuriy", 8000, true));
     v.push_back(new Driver("Ivan", 7000, 10, 560));
+    v.push_back(new Passenger("Kirill", 6000, false));
+    v.push_back(new Person("Kirill", 8000));
     v.push_back(new Passenger("Yuriy", 5000, true));
     v.push_back(new Person("Andrey", 5000));
     v.push_back(new Driver("Sergey", 6000, 7, 350));
@@ -142,22 +212,36 @@ int main() {
 
     Driver* driver_ptr;
     Passenger* pass_ptr;
-
-    cout << endl << "Sorting in the ascending order:" << endl;
+    // Sorting
+    cout << "Sorting in the ascending order:" << endl;
     sort(v.begin(), v.end(), ascending_compare);
     vector_output(v);
 
-    cout << endl << "Sorting in the descending order:" << endl;
+    cout << "Sorting in the descending order:" << endl;
     sort(v.begin(), v.end(), descending_compare);
     vector_output(v);
 
-    /*driver_ptr = (Driver*)v[0];
-    *driver_ptr << cout;
+    // Search_1
+    Passenger search1{ 6000 };
+    pass_ptr = &search1;
+    Person* ptr = (Person*)pass_ptr;
+    search(v, ptr);
 
-    pass_ptr = (Passenger*)v[3];
-    *pass_ptr << cout;
+    // Search_2
+    Driver search2{ "Sergey", 6000, 7, 350 };
+    driver_ptr = &search2;
+    ptr = (Person*)driver_ptr;
+    search(v, ptr);
 
-    *v[2] << cout;*/
+    // Search_3
+    Person search3{ "Kirill", 8000 };
+    ptr = &search3;
+    search(v, ptr);
+
+    // Search_4
+    Person search4{ 100000 };
+    ptr = &search4;
+    search(v, ptr);
 
     return 0;
 }
