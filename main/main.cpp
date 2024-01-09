@@ -5,7 +5,9 @@
 #include "../Passenger.h"
 #include "Order.h"
 #include <iostream>
+#include <ranges>
 #include <vector>
+#include <algorithm>
 #include <string>
 #include <iomanip>
 using namespace std;
@@ -35,12 +37,59 @@ void vector_output(vector <Person*> v) {
     cout << "--------------------------------------------------------------------------------------------------" << endl;
 }
 
+bool compare(Person* first, Person* second) {
+    bool flag = 0;
+    if (first->getType() != second->getType()) 
+        flag = first->getType() < second->getType();
+    else 
+    {
+        if (first->getName() != second->getName())
+            flag = first->getName() < second->getName();
+        else 
+        {
+            if (first->getBalance() != second->getBalance())
+                flag = first->getBalance() < second->getBalance();
+            else 
+            {
+                if (first->getType() == "Driver") // Driver - Driver
+                {
+                    Driver* driver_first = (Driver*)first;
+                    Driver* driver_second = (Driver*)second;
+                    if (getExperience(*driver_first) != getExperience(*driver_second))
+                        flag = getExperience(*driver_first) < getExperience(*driver_second);
+                    else
+                    {
+                        flag = getOrderAmount(*driver_first) < getOrderAmount(*driver_second);
+                    }
+                }
+                else 
+                {
+                    if (first->getType() == "Passenger") // Passenger - Passenger
+                    {
+                        Passenger* pass_first = (Passenger*)first;
+                        Passenger* pass_second = (Passenger*)second;
+                        flag = pass_first->getMethod() < pass_second->getMethod();
+                    } 
+                }
+                    
+            }
+        }
+    }
+        
+    return flag;
+}
+
 int main() {
     cout << "TESTS:" << endl;
     
     vector <Person*> v;
+    v.push_back(new Passenger("Anna", 6000, true));
+    v.push_back(new Driver("Ivan", 7000, 10, 600));
+    v.push_back(new Passenger("Yuriy", 8000, true));
     v.push_back(new Driver("Ivan", 7000, 10, 560));
     v.push_back(new Passenger("Yuriy", 5000, true));
+    v.push_back(new Person("Andrey", 5000));
+    v.push_back(new Driver("Sergey", 6000, 7, 350));
     v.push_back(new Person("Elena", 5500));
     v.push_back(new Passenger("Anna", 6000, false));
     v.push_back(new Person("Andrey", 3000));
@@ -51,6 +100,12 @@ int main() {
 
     Driver* driver_ptr;
     Passenger* pass_ptr;
+
+    sort(v.begin(), v.end(), compare);
+    
+    cout << endl << "Sorting in the ascending order:" << endl;
+
+    vector_output(v);
 
     /*driver_ptr = (Driver*)v[0];
     *driver_ptr << cout;
