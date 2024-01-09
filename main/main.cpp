@@ -37,7 +37,7 @@ void vector_output(vector <Person*> v) {
     cout << "--------------------------------------------------------------------------------------------------" << endl;
 }
 
-bool compare(Person* first, Person* second) {
+bool ascending_compare(Person* first, Person* second) {
     bool flag = 0;
     if (first->getType() != second->getType()) 
         flag = first->getType() < second->getType();
@@ -79,6 +79,48 @@ bool compare(Person* first, Person* second) {
     return flag;
 }
 
+bool descending_compare(Person* first, Person* second) {
+    bool flag = 0;
+    if (first->getType() != second->getType())
+        flag = first->getType() > second->getType();
+    else
+    {
+        if (first->getName() != second->getName())
+            flag = first->getName() > second->getName();
+        else
+        {
+            if (first->getBalance() != second->getBalance())
+                flag = first->getBalance() > second->getBalance();
+            else
+            {
+                if (first->getType() == "Driver") // Driver - Driver
+                {
+                    Driver* driver_first = (Driver*)first;
+                    Driver* driver_second = (Driver*)second;
+                    if (getExperience(*driver_first) != getExperience(*driver_second))
+                        flag = getExperience(*driver_first) > getExperience(*driver_second);
+                    else
+                    {
+                        flag = getOrderAmount(*driver_first) > getOrderAmount(*driver_second);
+                    }
+                }
+                else
+                {
+                    if (first->getType() == "Passenger") // Passenger - Passenger
+                    {
+                        Passenger* pass_first = (Passenger*)first;
+                        Passenger* pass_second = (Passenger*)second;
+                        flag = pass_first->getMethod() > pass_second->getMethod();
+                    }
+                }
+
+            }
+        }
+    }
+
+    return flag;
+}
+
 int main() {
     cout << "TESTS:" << endl;
     
@@ -101,10 +143,12 @@ int main() {
     Driver* driver_ptr;
     Passenger* pass_ptr;
 
-    sort(v.begin(), v.end(), compare);
-    
     cout << endl << "Sorting in the ascending order:" << endl;
+    sort(v.begin(), v.end(), ascending_compare);
+    vector_output(v);
 
+    cout << endl << "Sorting in the descending order:" << endl;
+    sort(v.begin(), v.end(), descending_compare);
     vector_output(v);
 
     /*driver_ptr = (Driver*)v[0];
