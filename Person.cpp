@@ -88,6 +88,3 @@ ostream& Person::operator << (ostream& os) {
 	else
 		throw string{"The Person name is missing!"};
 }
-//bool Person::operator< (Person& person) {
-//
-//}
