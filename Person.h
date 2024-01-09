@@ -22,5 +22,4 @@ public:
 	void test_virtual();
 	void test_non_virtual();
 	std::ostream& operator << (std::ostream& os);
-	bool operator<(Person& person);
 };
